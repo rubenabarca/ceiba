@@ -74,9 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: cardCount,
             itemBuilder: (BuildContext context, index) {
               return Center(
-                  child: Text(
-                index.toString(),
-              )); //Image(image: AssetImage('assets/images/card-back.png'))
+                  child: Text(index.toString(),
+                      style: DefaultTextStyle.of(context)
+                          .style
+                          .apply(fontSizeFactor: 2.0)
+                          .apply(
+                              color: Color.fromRGBO(0, 0, 128,
+                                  0.75)))); //Image(image: AssetImage('assets/images/card-back.png'))
             }),
       ),
     );
