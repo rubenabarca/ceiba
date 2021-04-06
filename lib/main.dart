@@ -46,6 +46,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int cardCount = 20;
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -69,9 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 childAspectRatio: 1 / 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10),
-            itemCount: 20,
+            itemCount: cardCount,
             itemBuilder: (BuildContext context, index) {
-              return Image(image: AssetImage('assets/images/card-back.png'));
+              return Center(
+                  child: Text(
+                index.toString(),
+              )); //Image(image: AssetImage('assets/images/card-back.png'))
             }),
       ),
     );
