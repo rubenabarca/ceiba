@@ -52,6 +52,7 @@ class MemoryCard {
   int index;
   int targetNumber;
   bool isSelected = false;
+  bool isCompleted = false;
   MemoryCard(this.index, this.targetNumber);
 }
 
@@ -99,16 +100,26 @@ class _MyHomePageState extends State<MyHomePage> {
               var randomNumber =
                   ((index < 10) ? (list1[index]) : list2[index - 10]);
               return Center(
-                child: memoryCardList[index].isSelected
-                    ? Text(randomNumber.toString(),
-                        style: DefaultTextStyle.of(context)
-                            .style
-                            .apply(fontSizeFactor: 2.0)
-                            .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
-                    : Image(image: AssetImage('assets/images/card-back.png')),
+                child: ElevatedButton(
+                  onPressed: () => {_memoryCardPressed(memoryCardList[index])},
+                  child: memoryCardList[index].isSelected ||
+                          memoryCardList[index].isCompleted
+                      ? Text(randomNumber.toString(),
+                          style: DefaultTextStyle.of(context)
+                              .style
+                              .apply(fontSizeFactor: 2.0)
+                              .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
+                      : Image(image: AssetImage('assets/images/card-back.png')),
+                ),
               );
             }),
       ),
     );
+  }
+
+  _memoryCardPressed(MemoryCard memoryCard) {
+    setState(() {
+      memoryCard.isSelected = true;
+    });
   }
 }
