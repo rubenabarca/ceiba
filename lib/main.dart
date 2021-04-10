@@ -1,3 +1,6 @@
+import 'dart:html';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -45,8 +48,28 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+class MemoryCard {
+  int index;
+  int targetNumber;
+  bool isSelected = false;
+  MemoryCard(this.index, this.targetNumber);
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int cardCount = 20;
+  List<int> list1 = List.generate(10, (index) => index);
+  List<int> list2 = List.generate(10, (index) => index);
+  List<MemoryCard> memoryCardList = List.empty();
+
+  _MyHomePageState() {
+    list1.shuffle();
+    list2.shuffle();
+    memoryCardList = List.generate(
+      cardCount,
+      (index) => MemoryCard(
+          index, ((index < 10) ? (list1[index]) : list2[index - 10])),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +96,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 10),
             itemCount: cardCount,
             itemBuilder: (BuildContext context, index) {
+              var randomNumber =
+                  ((index < 10) ? (list1[index]) : list2[index - 10]);
               return Center(
-                  child: Text(index.toString(),
-                      style: DefaultTextStyle.of(context)
-                          .style
-                          .apply(fontSizeFactor: 2.0)
-                          .apply(
-                              color: Color.fromRGBO(0, 0, 128,
-                                  0.75)))); //Image(image: AssetImage('assets/images/card-back.png'))
+                child: memoryCardList[index].isSelected
+                    ? Text(randomNumber.toString(),
+                        style: DefaultTextStyle.of(context)
+                            .style
+                            .apply(fontSizeFactor: 2.0)
+                            .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
+                    : Image(image: AssetImage('assets/images/card-back.png')),
+              );
             }),
       ),
     );
