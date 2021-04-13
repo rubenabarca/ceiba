@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<int> list1 = List.generate(10, (index) => index);
   List<int> list2 = List.generate(10, (index) => index);
   List<MemoryCard> memoryCardList = List.empty();
+  bool isGameCompleted = false;
 
   _MyHomePageState() {
     list1.shuffle();
@@ -87,39 +88,73 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 79,
-                childAspectRatio: 1 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10),
-            itemCount: cardCount,
-            itemBuilder: (BuildContext context, index) {
-              var randomNumber =
-                  ((index < 10) ? (list1[index]) : list2[index - 10]);
-              return Center(
-                child: ElevatedButton(
-                  onPressed: () => {_memoryCardPressed(memoryCardList[index])},
-                  child: memoryCardList[index].isSelected ||
-                          memoryCardList[index].isCompleted
-                      ? Text(randomNumber.toString(),
-                          style: DefaultTextStyle.of(context)
-                              .style
-                              .apply(fontSizeFactor: 2.0)
-                              .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
-                      : Image(image: AssetImage('assets/images/card-back.png')),
-                ),
-              );
-            }),
+        child: isGameCompleted
+            ? Text("Felicidades, juego completado!",
+                style: DefaultTextStyle.of(context)
+                    .style
+                    .apply(fontSizeFactor: 2.0)
+                    .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 79,
+                    childAspectRatio: 1 / 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10),
+                itemCount: cardCount,
+                itemBuilder: (BuildContext context, index) {
+                  var randomNumber =
+                      ((index < 10) ? (list1[index]) : list2[index - 10]);
+                  return Center(
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          {_memoryCardPressed(memoryCardList[index])},
+                      child: memoryCardList[index].isSelected ||
+                              memoryCardList[index].isCompleted
+                          ? Text(randomNumber.toString(),
+                              style: DefaultTextStyle.of(context)
+                                  .style
+                                  .apply(fontSizeFactor: 2.0)
+                                  .apply(
+                                      color: Color.fromRGBO(0, 0, 128, 0.75)))
+                          : Image(
+                              image: AssetImage('assets/images/card-back.png')),
+                    ),
+                  );
+                }),
       ),
     );
   }
 
   _memoryCardPressed(MemoryCard memoryCard) {
     setState(() {
+      // Creando una nueva variable
+      // usando el metodo where para filtrar la lista
+      // y extrayendo los elementos seleccionados.
+      // luego, creamos una copia y el resultado
+      // lo asignamos a la nueva variable.
+      var memoryCardSelectedElements =
+          memoryCardList.where((memoryCard) => memoryCard.isSelected).toList();
+      if (memoryCardSelectedElements.length == 2) {
+        memoryCardSelectedElements[0].isSelected = false;
+        memoryCardSelectedElements[1].isSelected = false;
+      }
       memoryCard.isSelected = true;
+      memoryCardSelectedElements =
+          memoryCardList.where((memoryCard) => memoryCard.isSelected).toList();
+      if (memoryCardSelectedElements.length == 2) {
+        var firstNumber = memoryCardSelectedElements[0].targetNumber;
+        var secondNumber = memoryCardSelectedElements[1].targetNumber;
+        if (secondNumber == firstNumber) {
+          memoryCardSelectedElements[0].isCompleted = true;
+          memoryCardSelectedElements[1].isCompleted = true;
+        }
+      }
+      var notCompletedCards = memoryCardList
+          .where((memoryCard) => memoryCard.isCompleted == false)
+          .toList();
+      if (notCompletedCards.isEmpty) {
+        isGameCompleted = true;
+      }
     });
   }
 }
