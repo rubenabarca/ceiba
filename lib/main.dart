@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MCG Ruben',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Memory Card Game'),
     );
   }
 }
@@ -54,14 +54,15 @@ class MemoryCard {
   bool isSelected = false;
   bool isCompleted = false;
   MemoryCard(this.index, this.targetNumber);
-}
+} //Se estableció el estado de MemoryCard en falso, tanto en isCompleted como en isSelected
 
 class _MyHomePageState extends State<MyHomePage> {
   int cardCount = 20;
   List<int> list1 = List.generate(10, (index) => index);
   List<int> list2 = List.generate(10, (index) => index);
   List<MemoryCard> memoryCardList = List.empty();
-  bool isGameCompleted = false;
+  bool isGameCompleted =
+      false; //Se establecieron dos listas, cada una con números del 1 al 10, y un total de cartas en lista de 20
 
   _MyHomePageState() {
     list1.shuffle();
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       (index) => MemoryCard(
           index, ((index < 10) ? (list1[index]) : list2[index - 10])),
     );
-  }
+  } //Se generó que la lista establezca los valores a mostrar en la página con la memoryCardList sea Random
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     .style
                     .apply(fontSizeFactor: 2.0)
                     .apply(color: Color.fromRGBO(0, 0, 128, 0.75)))
+            //Todo lo referido a la estética del juego
             : GridView.builder(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 79,
@@ -102,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSpacing: 10),
                 itemCount: cardCount,
                 itemBuilder: (BuildContext context, index) {
+                  //Todo lo referido al formato del juego
                   var randomNumber =
                       ((index < 10) ? (list1[index]) : list2[index - 10]);
                   return Center(
@@ -118,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: Color.fromRGBO(0, 0, 128, 0.75)))
                           : Image(
                               image: AssetImage('assets/images/card-back.png')),
-                    ),
+                    ), //Formato de la memoryCard
                   );
                 }),
       ),
