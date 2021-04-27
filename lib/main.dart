@@ -53,26 +53,33 @@ class MemoryCard {
   int targetNumber;
   bool isSelected = false;
   bool isCompleted = false;
-  MemoryCard(this.index, this.targetNumber);
-} //Se estableció el estado de MemoryCard en falso, tanto en isCompleted como en isSelected
+  MemoryCard(this.index, this.targetNumber); //Constructor Público
+} //Se estableció el estado INICIAL de MemoryCard en falso, tanto en isCompleted como en isSelected
+
+class Player {
+  int score = 0;
+}
 
 class _MyHomePageState extends State<MyHomePage> {
   int cardCount = 20;
   List<int> list1 = List.generate(10, (index) => index);
   List<int> list2 = List.generate(10, (index) => index);
   List<MemoryCard> memoryCardList = List.empty();
+  List<Player> players = List.empty();
   bool isGameCompleted =
       false; //Se establecieron dos listas, cada una con números del 1 al 10, y un total de cartas en lista de 20
+  _getTargetNumber(int index) {
+    return ((index < 10) ? (list1[index]) : list2[index - 10]);
+  }
 
   _MyHomePageState() {
     list1.shuffle();
     list2.shuffle();
     memoryCardList = List.generate(
       cardCount,
-      (index) => MemoryCard(
-          index, ((index < 10) ? (list1[index]) : list2[index - 10])),
+      (index) => MemoryCard(index, _getTargetNumber(index)),
     );
-  } //Se generó que la lista establezca los valores a mostrar en la página con la memoryCardList sea Random
+  } //Se generó que la lista establezca los valores a mostrar en la página con la memoryCardList siendo Random
 
   @override
   Widget build(BuildContext context) {
