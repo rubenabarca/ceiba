@@ -42,6 +42,15 @@ class _MyHomePageState extends State<MyHomePage> {
     yield sum;
   }
 
+  Iterable<Widget> generateTheListOfTextsFromMultiplesOf3Or5AndTheSum(
+      int limit) sync* {
+    for (var multiple in obtainMultiplesOf3Or5AndTheSum(limit)) {
+      yield Text(multiple.toString());
+    }
+  }
+
+  List<Widget> _textList = List.empty();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,13 +58,18 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
-        ),
-      ),
+          child: ListView.builder(
+              itemCount: _textList.length,
+              itemBuilder: (context, index) {
+                return _textList[index];
+              })),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _textList = List.from(
+                generateTheListOfTextsFromMultiplesOf3Or5AndTheSum(1000));
+          });
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
